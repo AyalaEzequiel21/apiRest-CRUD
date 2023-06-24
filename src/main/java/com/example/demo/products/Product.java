@@ -4,33 +4,35 @@ import jakarta.persistence.*;
 import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDate;
+import java.time.Period;
+
 @Entity
 @Table
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String name;
     private Double price;
     private LocalDate creationDate;
+    @Transient
     private Integer yearsAntiguaty;
 
     public Product() {
     }
 
-    public Product(Long id, String name, Double price, LocalDate creationDate, Integer yearsAntiguaty) {
+    public Product(Long id, String name, Double price, LocalDate creationDate) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.creationDate = creationDate;
-        this.yearsAntiguaty = yearsAntiguaty;
     }
 
-    public Product(String name, Double price, LocalDate creationDate, Integer yearsAntiguaty) {
+    public Product(String name, Double price, LocalDate creationDate) {
         this.name = name;
         this.price = price;
         this.creationDate = creationDate;
-        this.yearsAntiguaty = yearsAntiguaty;
     }
 
     public Long getId() {
@@ -66,7 +68,7 @@ public class Product {
     }
 
     public Integer getYearsAntiguaty() {
-        return yearsAntiguaty;
+        return Period.between(this.creationDate, LocalDate.now() ).getYears();
     }
 
     public void setYearsAntiguaty(Integer yearsAntiguaty) {
